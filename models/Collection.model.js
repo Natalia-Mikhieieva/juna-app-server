@@ -11,8 +11,8 @@ const collectionSchema = new Schema({
       },
       user: { type: Schema.Types.ObjectId, ref: "User" },
       imageUrl: {
-        type: String,
-        required: true,
+        type: String
+        // required: true,
       },
       comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }], 
 })

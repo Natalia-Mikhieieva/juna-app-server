@@ -3,10 +3,16 @@ const Collection = require('../models/Collection.model')
 const Item = require('../models/Item.model')
 
 router.post('/collection',(req,res,next)=>{
-    const {title, description} = req.body
+    const {title,
+        creator,
+        user, 
+        comments} = req.body
 
 
-    Collection.create({title,description})
+    Collection.create({title,
+        creator,
+        user, 
+        comments})
     .then(newCollection=>{
         console.log(newCollection)
         res.json(newCollection)})
