@@ -1,40 +1,31 @@
 const router = require("express").Router();
-const Collection = require('../models/Collection.model')
-const Item = require('../models/Item.model')
+const Collection = require("../models/Collection.model");
+const Item = require("../models/Item.model");
 
-router.post('/collection',(req,res,next)=>{
-    const {title,
-        creator,
-        user, 
-        comments} = req.body
+//  POST /api/projects  -  Creates a new collection
+router.post("/collection", (req, res, next) => {
+  const { title, description, user, imageUrl } = req.body;
 
+  Collection.create({ title, description, user, imageUrl })
+    .then((response) => res.json(response))
+    .catch((err) => res.json(err));
+});
 
-    Collection.create({title,
-        creator,
-        user, 
-        comments})
-    .then(newCollection=>{
-        console.log(newCollection)
-        res.json(newCollection)})
-    .catch(error=>console.log(error))
-})
-
-router.get('/collection',(req,res,next)=>{
-    Collection.find()
-    .then(allCollections=>{
-        res.json(allCollections)
+router.get("/collection", (req, res, next) => {
+  Collection.find()
+    .then((allCollections) => {
+      res.json(allCollections);
     })
-    .catch((error)=>{
-        console.log(error)
-    })
-})
+    .catch((error) => {
+      console.log(error);
+    });
+});
 
-router.get('/collection/:itemId',(req,res,next)=>{
-    console.log(req.params.itemId)
-    Collection.findById(req.params.itemId)
-    .then(oneItem=>{
-        res.json(oneItem)
-    })
-})
+router.get("/collection/:itemId", (req, res, next) => {
+  console.log(req.params.itemId);
+  Collection.findById(req.params.itemId).then((oneItem) => {
+    res.json(oneItem);
+  });
+});
 
 module.exports = router;
