@@ -15,7 +15,7 @@ const itemSchema = new Schema({
     required: true,
   },
   price: {
-    type: number,
+    type: Number,
     required: true,
   },
   stock: {
@@ -31,6 +31,6 @@ const itemSchema = new Schema({
   comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
 });
 
-const item = model("Item", itemSchema);
+const Item = model("Item", itemSchema);
 
 module.exports = Item;

@@ -23,11 +23,11 @@ require("./config")(app);
 /* const allRoutes = require("./routes/index.routes");
 app.use("/api", allRoutes); */
 
-const collectionRouter = require("./routes/collection.routes");
-app.use("/api", isAuthenticated, collectionRouter);
+const collectionRoutes = require("./routes/collection.routes");
+app.use("/api", isAuthenticated, collectionRoutes);
 
-const itemRouter = require("./routes/item.routes");
-app.use("/api", isAuthenticated, itemRouter);
+const itemRoutes = require("./routes/item.routes");
+app.use("/api", isAuthenticated, itemRoutes);
 
 const indexRoutes = require("./routes/index.routes");
 app.use("/api", indexRoutes);
