@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 
 const fileUploader = require("../config/cloudinary.config");
 
+
 //  POST Create new item
 router.post(
   "/item/create",
@@ -52,14 +53,7 @@ router.get("/item/:itemId", (req, res, next) => {
     });
 });
 
-//router for the DELETE one ITEM button =>
-router.post("/item/:itemId/delete", (req, res) => {
-  const { itemId } = req.params;
 
-  Pets.findByIdAndDelete(itemId)
-    .then((response) => res.json(response))
-    .catch((err) => res.json(err));
-});
 
 // GET route to display the form to update an ITEM
 router.get("/item/:itemId/edit", (req, res, next) => {
@@ -71,7 +65,6 @@ router.get("/item/:itemId/edit", (req, res, next) => {
 // POST route to actually make updates on a specific ITEM
 router.post(
   "/item/:itemId/edit",
-  fileUploader.single("itemImage"),
   (req, res) => {
     const { title, brand, description, price, stock, user, owner, comments } =
       req.body;
@@ -103,5 +96,29 @@ router.post(
       .catch((err) => res.json(err));
   }
 );
+
+router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
+    // console.log("file is: ", req.file)
+   
+    if (!req.file) {
+      next(new Error("No file uploaded!"));
+      return;
+    }
+    
+    // Get the URL of the uploaded file and send it as a response.
+    // 'fileUrl' can be any name, just make sure you remember to use the same when accessing it on the frontend
+    
+    res.json({ fileUrl: req.file.path });
+  });
+
+  
+  //router for the DELETE one ITEM button =>
+router.post("/item/:itemId/delete", (req, res) => {
+    const { itemId } = req.params;
+  
+    Pets.findByIdAndDelete(itemId)
+      .then((response) => res.json(response))
+      .catch((err) => res.json(err));
+  });
 
 module.exports = router;
