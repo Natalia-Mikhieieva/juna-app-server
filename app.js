@@ -21,12 +21,14 @@ require("./config")(app);
 // 👇 Start handling routes here
 //  ADDED ROUTES HERE by Natalia
 
-
 const collectionRoutes = require("./routes/collection.routes");
 app.use("/api", collectionRoutes);
 
 const itemRoutes = require("./routes/item.routes");
 app.use("/api", itemRoutes);
+
+const commentRoutes = require("./routes/comment.routes");
+app.use("/api", commentRoutes);
 
 const indexRoutes = require("./routes/index.routes");
 app.use("/api", indexRoutes);

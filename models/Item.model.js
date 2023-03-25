@@ -8,24 +8,19 @@ const itemSchema = new Schema({
   },
   brand: {
     type: String,
-    required: true,
   },
   description: {
     type: String,
-    required: true,
   },
   price: {
     type: Number,
-    required: true,
   },
   stock: {
     type: Boolean,
-    required: true,
   },
   user: { type: Schema.Types.ObjectId, ref: "User" },
   imageUrl: {
     type: String,
-    required: true,
   },
   owner: Boolean,
   comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],

@@ -2,7 +2,7 @@ const router = require("express").Router();
 const Collection = require("../models/Collection.model");
 const Item = require("../models/Item.model");
 
-//  POST /api/projects  -  Creates a new collection
+//  POST /api/collections  -  Creates a new collection
 router.post("/collection", (req, res, next) => {
   const { title, description, user, imageUrl } = req.body;
 
@@ -21,11 +21,7 @@ router.get("/collection", (req, res, next) => {
     });
 });
 
-router.get("/collection/:itemId", (req, res, next) => {
-  console.log(req.params.itemId);
-  Collection.findById(req.params.itemId).then((oneItem) => {
-    res.json(oneItem);
-  });
-});
+
+
 
 module.exports = router;
