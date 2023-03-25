@@ -63,20 +63,20 @@ router.get("/item/:itemId/edit", (req, res, next) => {
 });
 
 // POST route to actually make updates on a specific ITEM
-router.post(
+router.put(
   "/item/:itemId/edit",
   (req, res) => {
-    const { title, brand, description, price, stock, user, owner, comments } =
+    const { title, brand, description, price, stock, user, owner, imageUrl, comments } =
       req.body;
 
     let itemImageNew;
     if (req.file) {
       itemImageNew = req.file.path;
     } else {
-      itemImageNew = itemImage;
+      itemImageNew = imageUrl;
     }
 
-    Pets.findByIdAndUpdate(
+    Item.findByIdAndUpdate(
       req.params.itemId,
       {
         title: title,
@@ -111,12 +111,12 @@ router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
     res.json({ fileUrl: req.file.path });
   });
 
-  
+
   //router for the DELETE one ITEM button =>
-router.post("/item/:itemId/delete", (req, res) => {
+router.delete("/item/:itemId/delete", (req, res) => {
     const { itemId } = req.params;
   
-    Pets.findByIdAndDelete(itemId)
+    Item.findByIdAndDelete(itemId)
       .then((response) => res.json(response))
       .catch((err) => res.json(err));
   });
