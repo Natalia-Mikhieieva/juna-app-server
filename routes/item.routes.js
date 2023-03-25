@@ -6,9 +6,7 @@ const fileUploader = require("../config/cloudinary.config");
 
 
 //  POST Create new item
-router.post(
-  "/item/create",
-  fileUploader.single("itemImage"),
+router.post("/item/create",fileUploader.single("itemImage"),
   (req, res, next) => {
     const {
       title,
@@ -20,6 +18,7 @@ router.post(
       owner,
       imageUrl,
       comments,
+      catalog
     } = req.body;
 
     Item.create({
@@ -32,6 +31,7 @@ router.post(
       owner,
       imageUrl,
       comments,
+      catalog
     })
       .then((response) => res.json(response))
       .catch((err) => res.json(err));
@@ -53,20 +53,11 @@ router.get("/item/:itemId", (req, res, next) => {
     });
 });
 
-
-
-// GET route to display the form to update an ITEM
-router.get("/item/:itemId/edit", (req, res, next) => {
-  Item.findById(req.params.itemId)
-    .then((response) => res.json(response))
-    .catch((err) => res.json(err));
-});
-
 // POST route to actually make updates on a specific ITEM
 router.put(
   "/item/:itemId/edit",
   (req, res) => {
-    const { title, brand, description, price, stock, user, owner, imageUrl, comments } =
+    const { title, brand, description, price, stock, user, owner, imageUrl, comments, catalog } =
       req.body;
 
     let itemImageNew;
@@ -88,6 +79,7 @@ router.put(
         imageUrl: imageUrl,
         owner: owner,
         comments: comments,
+        catalog: catalog
       },
       { new: true }
     )
