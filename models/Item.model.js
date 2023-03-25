@@ -29,6 +29,7 @@ const itemSchema = new Schema({
   },
   owner: Boolean,
   comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+  // collection: { type: Schema.Types.ObjectId, ref: "Collection" },
 });
 
 const Item = model("Item", itemSchema);
