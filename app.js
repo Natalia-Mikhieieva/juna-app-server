@@ -21,8 +21,8 @@ require("./config")(app);
 // 👇 Start handling routes here
 //  ADDED ROUTES HERE by Natalia
 
-const collectionRoutes = require("./routes/collection.routes");
-app.use("/api", collectionRoutes);
+const catalogRoutes = require("./routes/catalog.routes");
+app.use("/api", catalogRoutes);
 
 const itemRoutes = require("./routes/item.routes");
 app.use("/api", itemRoutes);
