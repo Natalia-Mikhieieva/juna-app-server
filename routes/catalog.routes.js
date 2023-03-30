@@ -4,9 +4,9 @@ const Item = require("../models/Item.model");
 
 //  POST /api/collections  -  Creates a new collection
 router.post("/catalog", (req, res, next) => {
-  const { title, description, user, imageUrl } = req.body;
+  const { title, description, brand, price, stock, user, imageUrl } = req.body;
 
-  Catalog.create({ title, description, user, imageUrl })
+  Catalog.create({ title, description, brand, price, stock, user, imageUrl })
     .then((response) => res.json(response))
     .catch((err) => res.json(err));
 });
@@ -20,8 +20,5 @@ router.get("/catalog", (req, res, next) => {
       console.log(error);
     });
 });
-
-
-
 
 module.exports = router;

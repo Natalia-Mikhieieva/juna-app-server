@@ -10,6 +10,19 @@ const catalogSchema = new Schema({
     type: String,
     required: true,
   },
+  brand: {
+    type: String,
+    required: true,
+  },
+  stock: {
+    type: Number,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+
   user: { type: Schema.Types.ObjectId, ref: "User" },
   imageUrl: {
     type: String,
