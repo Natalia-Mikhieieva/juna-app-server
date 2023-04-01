@@ -1,9 +1,10 @@
+const mongoose = require("mongoose");
 const router = require("express").Router();
 const Catalog = require("../models/Catalog.model");
 const Item = require("../models/Item.model");
 
 //  POST /api/catalogs  -  Creates a new catalog
-router.post("/catalogs", (req, res, next) => {
+router.post("/allcatalogs", (req, res, next) => {
   const { title, description } = req.body;
 
   Catalog.create({
@@ -16,7 +17,7 @@ router.post("/catalogs", (req, res, next) => {
 });
 
 // GET /api/catalogs -  Retrieves all of the catalogs
-router.get("/catalogs", (req, res, next) => {
+router.get("/allcatalogs", (req, res, next) => {
   Catalog.find()
     .populate("items")
     .then((allCatalogs) => res.json(allCatalogs))
@@ -24,7 +25,7 @@ router.get("/catalogs", (req, res, next) => {
 });
 
 //  GET /api/catalogs/:catalogId -  Retrieves a specific catalog by id
-router.get("/catalogs/:catalogId", (req, res, next) => {
+router.get("/allcatalogs/:catalogId", (req, res, next) => {
   const { catalogId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(catalogId)) {
@@ -40,11 +41,11 @@ router.get("/catalogs/:catalogId", (req, res, next) => {
     .catch((error) => res.json(error));
 });
 
-// PUT  /api/catalogs/:catalogId  -  Updates a specific catalogs by id
-router.put("/catalogs/:catalogId", (req, res, next) => {
-  const { catalogsId } = req.params;
+// PUT  /api/catalogs/:catalogId  -  Updates a specific catalog by id
+router.put("/allcatalogs/:catalogId", (req, res, next) => {
+  const { catalogId } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(catalogsId)) {
+  if (!mongoose.Types.ObjectId.isValid(catalogId)) {
     res.status(400).json({ message: "Specified id is not valid" });
     return;
   }
@@ -54,8 +55,8 @@ router.put("/catalogs/:catalogId", (req, res, next) => {
     .catch((error) => res.json(error));
 });
 
-// DELETE  /api/catalogs/:catalogId  -  Deletes a specific catalog by id
-router.delete("/catalogs/:catalogId", (req, res, next) => {
+// DELETE  /api/allcatalogs/:catalogId  -  Deletes a specific catalog by id
+router.delete("/allcatalogs/:catalogId", (req, res, next) => {
   const { catalogId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(catalogId)) {

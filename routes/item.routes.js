@@ -6,44 +6,40 @@ const mongoose = require("mongoose");
 const fileUploader = require("../config/cloudinary.config");
 
 //  POST /api/items  -  Creates a new item
-router.post(
-  "/items/create-item",
-  fileUploader.single("itemImage"),
-  (req, res, next) => {
-    const {
-      title,
-      brand,
-      description,
-      price,
-      stock,
-      user,
-      imageUrl,
-      category,
-      comments,
-      catalogId,
-    } = req.body;
+router.post("/items", fileUploader.single("itemImage"), (req, res, next) => {
+  const {
+    title,
+    brand,
+    description,
+    price,
+    stock,
+    user,
+    imageUrl,
+    category,
+    comments,
+    catalogId,
+  } = req.body;
 
-    Item.create({
-      title,
-      brand,
-      description,
-      price,
-      stock,
-      user,
-      imageUrl,
-      category,
-      comments,
-      catalogId,
+  Item.create({
+    title,
+    brand,
+    description,
+    price,
+    stock,
+    user,
+    imageUrl,
+    category,
+    comments,
+    catalogId,
+  })
+    .then((newItem) => {
+      return Catalog.findByIdAndUpdate(catalogId, {
+        $push: { items: newItem._id },
+      });
     })
-      .then((newItem) => {
-        return Catalog.findByIdAndUpdate(catalogId, {
-          $push: { items: newItem._id },
-        });
-      })
-      .then((response) => res.json(response))
-      .catch((err) => res.json(err));
-  }
-);
+    .then((response) => res.json(response))
+    .catch((err) => res.json(err));
+});
 
 //GET route for an item
 router.get("/item/:itemId", (req, res, next) => {
@@ -95,7 +91,7 @@ router.put("/item/:itemId/edit", (req, res) => {
       price: price,
       stock: stock,
       user: user,
-      category:  category,
+      category: category,
       imageUrl: imageUrl,
       owner: owner,
       comments: comments,
@@ -104,6 +100,15 @@ router.put("/item/:itemId/edit", (req, res) => {
     { new: true }
   )
 
+    .then((response) => res.json(response))
+    .catch((err) => res.json(err));
+});
+
+//router for the DELETE one ITEM button =>
+router.delete("/item/:itemId/delete", (req, res) => {
+  const { itemId } = req.params;
+
+  Item.findByIdAndDelete(itemId)
     .then((response) => res.json(response))
     .catch((err) => res.json(err));
 });
@@ -120,15 +125,6 @@ router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
   // 'fileUrl' can be any name, just make sure you remember to use the same when accessing it on the frontend
 
   res.json({ fileUrl: req.file.path });
-});
-
-//router for the DELETE one ITEM button =>
-router.delete("/item/:itemId/delete", (req, res) => {
-  const { itemId } = req.params;
-
-  Item.findByIdAndDelete(itemId)
-    .then((response) => res.json(response))
-    .catch((err) => res.json(err));
 });
 
 module.exports = router;
