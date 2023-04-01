@@ -1,5 +1,5 @@
-const { Schema, model } = require("mongoose");
 const mongoose = require("mongoose");
+const { Schema, model } = mongoose;
 
 const catalogSchema = new Schema({
   title: {
@@ -10,25 +10,8 @@ const catalogSchema = new Schema({
     type: String,
     required: true,
   },
-  brand: {
-    type: String,
-    required: true,
-  },
-  stock: {
-    type: Number,
-    required: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-
-  user: { type: Schema.Types.ObjectId, ref: "User" },
-  imageUrl: {
-    type: String,
-  },
+  items: [{ type: Schema.Types.ObjectId, ref: "Item" }],
+  // owner will be added later on
 });
 
-const Catalog = model("Catalog", catalogSchema);
-
-module.exports = Catalog;
+module.exports = model("Catalog", catalogSchema);

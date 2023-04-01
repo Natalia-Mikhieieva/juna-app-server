@@ -1,12 +1,13 @@
 const router = require("express").Router();
 const Item = require("../models/Item.model");
+const Catalog = require("../models/Catalog.model");
 const mongoose = require("mongoose");
 
 const fileUploader = require("../config/cloudinary.config");
 
-//  POST Create new item
+//  POST /api/items  -  Creates a new item
 router.post(
-  "/item/create",
+  "/items/create-item",
   fileUploader.single("itemImage"),
   (req, res, next) => {
     const {
@@ -16,10 +17,10 @@ router.post(
       price,
       stock,
       user,
-      owner,
       imageUrl,
+      category,
       comments,
-      catalog,
+      catalogId,
     } = req.body;
 
     Item.create({
@@ -29,11 +30,16 @@ router.post(
       price,
       stock,
       user,
-      owner,
       imageUrl,
+      category,
       comments,
-      catalog,
+      catalogId,
     })
+      .then((newItem) => {
+        return Catalog.findByIdAndUpdate(catalogId, {
+          $push: { items: newItem._id },
+        });
+      })
       .then((response) => res.json(response))
       .catch((err) => res.json(err));
   }
@@ -67,8 +73,8 @@ router.put("/item/:itemId/edit", (req, res) => {
     price,
     stock,
     user,
-    owner,
     imageUrl,
+    category,
     comments,
     catalog,
   } = req.body;
@@ -89,6 +95,7 @@ router.put("/item/:itemId/edit", (req, res) => {
       price: price,
       stock: stock,
       user: user,
+      category:  category,
       imageUrl: imageUrl,
       owner: owner,
       comments: comments,

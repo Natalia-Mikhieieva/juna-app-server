@@ -1,5 +1,5 @@
-const { Schema, model } = require("mongoose");
 const mongoose = require("mongoose");
+const { Schema, model } = mongoose;
 
 const itemSchema = new Schema({
   title: {
@@ -18,15 +18,15 @@ const itemSchema = new Schema({
   stock: {
     type: Boolean,
   },
-  user: { type: Schema.Types.ObjectId, ref: "User" },
   imageUrl: {
     type: String,
   },
-  owner: Boolean,
+  category: {
+    type: String,
+  },
+  user: { type: Schema.Types.ObjectId, ref: "User" },
   comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
-  catalog: { type: Schema.Types.ObjectId, ref: "Catalog" }
+  catalog: { type: Schema.Types.ObjectId, ref: "Catalog" },
 });
 
-const Item = model("Item", itemSchema);
-
-module.exports = Item;
+module.exports = model("Item", itemSchema);
