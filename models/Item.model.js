@@ -24,9 +24,10 @@ const itemSchema = new Schema({
   category: {
     type: String,
   },
+
   user: { type: Schema.Types.ObjectId, ref: "User" },
   comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
-  catalog: { type: Schema.Types.ObjectId, ref: "Catalog" },
+  catalogId: { type: Schema.Types.ObjectId, ref: "Catalog" },
 });
 
 module.exports = model("Item", itemSchema);
