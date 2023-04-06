@@ -61,7 +61,7 @@ router.get("/item/:itemId", (req, res, next) => {
 });
 
 // POST route to actually make updates on a specific ITEM
-router.put("/item/:itemId/edit", (req, res) => {
+router.put("/item/:itemId", (req, res) => {
   const {
     title,
     brand,
@@ -93,7 +93,6 @@ router.put("/item/:itemId/edit", (req, res) => {
       user: user,
       category: category,
       imageUrl: imageUrl,
-      owner: owner,
       comments: comments,
       catalog: catalog,
     },
@@ -105,11 +104,15 @@ router.put("/item/:itemId/edit", (req, res) => {
 });
 
 //router for the DELETE one ITEM button =>
-router.delete("/item/:itemId/delete", (req, res) => {
+router.delete("/item/:itemId", (req, res) => {
   const { itemId } = req.params;
 
   Item.findByIdAndDelete(itemId)
-    .then((response) => res.json(response))
+    .then(() =>
+      res.json({
+        message: `Item with ${itemId} is removed successfully.`,
+      })
+    )
     .catch((err) => res.json(err));
 });
 
@@ -120,9 +123,6 @@ router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
     next(new Error("No file uploaded!"));
     return;
   }
-
-  // Get the URL of the uploaded file and send it as a response.
-  // 'fileUrl' can be any name, just make sure you remember to use the same when accessing it on the frontend
 
   res.json({ fileUrl: req.file.path });
 });
