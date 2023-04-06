@@ -72,7 +72,7 @@ router.put("/item/:itemId", (req, res) => {
     imageUrl,
     category,
     comments,
-    catalog,
+    catalogId,
   } = req.body;
 
   let itemImageNew;
@@ -94,7 +94,7 @@ router.put("/item/:itemId", (req, res) => {
       category: category,
       imageUrl: imageUrl,
       comments: comments,
-      catalog: catalog,
+      catalogId: catalogId,
     },
     { new: true }
   )
