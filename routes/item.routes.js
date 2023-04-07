@@ -30,7 +30,7 @@ router.post("/items", fileUploader.single("itemImage"), (req, res, next) => {
     imageUrl,
     category,
     comments,
-    catalogId,
+    catalog: catalogId,
   })
     .then((newItem) => {
       return Catalog.findByIdAndUpdate(catalogId, {
@@ -72,7 +72,7 @@ router.put("/item/:itemId", (req, res) => {
     imageUrl,
     category,
     comments,
-    catalogId,
+    catalog: catalogId,
   } = req.body;
 
   let itemImageNew;
@@ -94,7 +94,7 @@ router.put("/item/:itemId", (req, res) => {
       category: category,
       imageUrl: imageUrl,
       comments: comments,
-      catalogId: catalogId,
+      catalog: catalogId,
     },
     { new: true }
   )
