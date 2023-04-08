@@ -8,7 +8,9 @@ const catalogSchema = new Schema({
   },
   description: {
     type: String,
-    required: true,
+  },
+  imageUrl: {
+    type: String,
   },
   items: [{ type: Schema.Types.ObjectId, ref: "Item" }],
   // owner will be added later on

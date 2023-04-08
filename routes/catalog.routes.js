@@ -3,24 +3,36 @@ const router = require("express").Router();
 const Catalog = require("../models/Catalog.model");
 const Item = require("../models/Item.model");
 
-//  POST /api/catalogs  -  Creates a new catalog
-router.post("/allcatalogs", (req, res, next) => {
-  const { title, description } = req.body;
-
-  Catalog.create({
-    title,
-    description,
-    items: [],
-  })
-    .then((response) => res.json(response))
-    .catch((err) => res.json(err));
-});
+const fileUploader = require("../config/cloudinary.config");
 
 // GET /api/catalogs -  Retrieves all of the catalogs
 router.get("/allcatalogs", (req, res, next) => {
   Catalog.find()
     .populate("items")
     .then((allCatalogs) => res.json(allCatalogs))
+    .catch((err) => res.json(err));
+});
+
+// POST "/api/upload" => Route that receives the image, sends it to Cloudinary via the fileUploader and returns the image URL
+router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
+  if (!req.file) {
+    next(new Error("No file uploaded!"));
+    return;
+  }
+  res.json({ fileUrl: req.file.path });
+});
+
+//  POST /api/catalogs  -  Creates a new catalog
+router.post("/allcatalogs", (req, res, next) => {
+  const { title, description, imageUrl } = req.body;
+
+  Catalog.create({
+    title,
+    description,
+    imageUrl,
+    items: [],
+  })
+    .then((response) => res.json(response))
     .catch((err) => res.json(err));
 });
 
