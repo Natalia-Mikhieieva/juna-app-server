@@ -9,7 +9,8 @@ const commentSchema = new Schema({
         type: String, 
         // required: true
     },
-    owner: Boolean
+    owner: Boolean,
+    timestamp: Date
 })
 
 const Comment = model("Comment", commentSchema);

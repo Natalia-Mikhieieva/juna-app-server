@@ -5,9 +5,12 @@ const Item = require("../models/Item.model");
 const { isAuthenticated } = require("../middleware/jwt.middleware")
 
 //creating comment
-router.post('/item/:itemId/comment', isAuthenticated, (req,res) => {
+router.post('/item/:itemId/comments', isAuthenticated, (req,res) => {
     const {itemId} = req.params;
-    const { message, author } = req.body;
+    const { 
+      message, 
+      author,
+      timestamp } = req.body;
   
     Item.findById(itemId)
     .then(dbItem => {
@@ -17,7 +20,7 @@ router.post('/item/:itemId/comment', isAuthenticated, (req,res) => {
         return 
       }
   
-      newComment = new Comment({message,author: req.payload.name});
+      newComment = new Comment({message, author: req.payload.name, timestamp});
   
       newComment
       .save()
@@ -26,11 +29,33 @@ router.post('/item/:itemId/comment', isAuthenticated, (req,res) => {
         dbItem
           .save()      
           .then(updatedItem => res.json(updatedItem))
-      });
+      })
+      .catch((err) => res.json(err));
     });
   })
+
+  router.get("/item/:itemId/comments/:commentsId", (req,res,next) => {
+    const { itemId } = req.params;
+    const { commentsId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(itemId) && !mongoose.Types.ObjectId.isValid(commentsId)) {
+      res.status(400).json({ message: "Specified id is not valid" });
+      return;
+    }
+    Item.findById(req.params.commentsId)
+      // .populate('User')
+      .then((oneComment) => {
+        console.log(oneComment);
+        res.status(200).json(oneComment);
+      })
   
-  router.delete('/comment/:commentId/delete', (req,res) => {
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
+
+  
+  router.delete('/comments/:commentId/delete', (req,res) => {
     const { commentId } = req.params;
     Comment.findByIdAndDelete(commentId)
       .then((response) => {res.json(response)})
