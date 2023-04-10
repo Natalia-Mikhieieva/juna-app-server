@@ -5,34 +5,49 @@ const Item = require("../models/Item.model");
 const { isAuthenticated } = require("../middleware/jwt.middleware")
 
 //creating comment
-router.post('/item/:itemId/comments', isAuthenticated, (req,res) => {
+router.post('/item/:itemId/comments', (req,res) => {
     const {itemId} = req.params;
     const { 
       message, 
       author,
-      timestamp } = req.body;
-  
-    Item.findById(itemId)
-    .then(dbItem => {
-      let newComment;
-      if(!message){
-        res.json(`/item/${itemId}`)
-        return 
-      }
-  
-      newComment = new Comment({message, author: req.payload.name, timestamp});
-  
-      newComment
-      .save()
-      .then(dbComment => {
-        dbItem.comments.push(dbComment._id);
-        dbItem
-          .save()      
-          .then(updatedItem => res.json(updatedItem))
+      timestamp
+      
+    } = req.body;
+      
+      Comment.create({
+        message,
+        author,
+        timestamp
       })
-      .catch((err) => res.json(err));
-    });
-  })
+      .then((newComment) => {
+        return Item.findByIdAndUpdate(itemId, {
+          $push: { comments: newComment._id }
+        })
+      })
+      .then((response) => res.json(response))
+      .catch((err) => console.log("error with comment", err))
+    })
+  //   Item.findById(itemId)
+  //   .then(dbItem => {
+  //     let newComment;
+  //     if(!message){
+  //       res.json(`/item/${itemId}`)
+  //       return 
+  //     }
+  
+  //     newComment = new Comment({message, author: req.payload.name, timestamp});
+  
+  //     newComment
+  //     .save()
+  //     .then(dbComment => {
+  //       dbItem.comments.push(dbComment._id);
+  //       dbItem
+  //         .save()      
+  //         .then(updatedItem => res.json(updatedItem))
+  //     })
+  //     .catch((err) => res.json(err));
+  //   });
+  // })
 
   router.get("/item/:itemId/comments/:commentsId", (req,res,next) => {
     const { itemId } = req.params;

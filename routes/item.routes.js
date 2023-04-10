@@ -34,7 +34,7 @@ router.post("/items", fileUploader.single("itemImage"), (req, res, next) => {
   })
     .then((newItem) => {
       return Catalog.findByIdAndUpdate(catalogId, {
-        $push: { items: newItem._id },
+        $push: { items: newItem._id }
       });
     })
     .then((response) => res.json(response))
