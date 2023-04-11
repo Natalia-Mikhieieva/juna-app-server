@@ -5,13 +5,12 @@ const Item = require("../models/Item.model");
 const { isAuthenticated } = require("../middleware/jwt.middleware")
 
 //creating comment
-router.post('/item/:itemId/comments', (req,res) => {
+router.post('/item/:itemId/comments', isAuthenticated, (req,res) => {
     const {itemId} = req.params;
     const { 
       message, 
       author,
       timestamp
-      
     } = req.body;
       
       Comment.create({
@@ -49,14 +48,14 @@ router.post('/item/:itemId/comments', (req,res) => {
   //   });
   // })
 
-  router.get("/item/:itemId/comments/:commentsId", (req,res,next) => {
+  router.get("comments/:commentsId", (req,res,next) => {
     const { itemId } = req.params;
     const { commentsId } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(itemId) && !mongoose.Types.ObjectId.isValid(commentsId)) {
+    if (!mongoose.Types.ObjectId.isValid(commentsId)) {
       res.status(400).json({ message: "Specified id is not valid" });
       return;
     }
-    Item.findById(req.params.commentsId)
+    Comment.findById(req.params.commentsId)
       // .populate('User')
       .then((oneComment) => {
         console.log(oneComment);
