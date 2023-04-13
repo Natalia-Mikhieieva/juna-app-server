@@ -40,6 +40,16 @@ router.post("/items", fileUploader.single("itemImage"), (req, res, next) => {
     .then((response) => res.json(response))
     .catch((err) => res.json(err));
 });
+router.get('/items', (req,res,next) =>{
+  Item.find()
+  .then((allItems) => {
+    res.json(allItems)
+    console.log(allItems)
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+})
 
 //GET route for an item
 router.get("/item/:itemId", (req, res, next) => {
@@ -49,7 +59,7 @@ router.get("/item/:itemId", (req, res, next) => {
     return;
   }
   Item.findById(req.params.itemId)
-    // .populate('User')
+    .populate('comments')
     .then((oneItem) => {
       console.log(oneItem);
       res.status(200).json(oneItem);

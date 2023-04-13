@@ -5,7 +5,7 @@ const Item = require("../models/Item.model");
 const { isAuthenticated } = require("../middleware/jwt.middleware")
 
 //creating comment
-router.post('/item/:itemId/comments', isAuthenticated, (req,res) => {
+router.post('/item/:itemId/comments', (req,res,next) => {
     const {itemId} = req.params;
     const { 
       message, 
@@ -21,34 +21,14 @@ router.post('/item/:itemId/comments', isAuthenticated, (req,res) => {
       .then((newComment) => {
         return Item.findByIdAndUpdate(itemId, {
           $push: { comments: newComment._id }
-        })
+        }, { new: true })
       })
       .then((response) => res.json(response))
       .catch((err) => console.log("error with comment", err))
     })
-  //   Item.findById(itemId)
-  //   .then(dbItem => {
-  //     let newComment;
-  //     if(!message){
-  //       res.json(`/item/${itemId}`)
-  //       return 
-  //     }
-  
-  //     newComment = new Comment({message, author: req.payload.name, timestamp});
-  
-  //     newComment
-  //     .save()
-  //     .then(dbComment => {
-  //       dbItem.comments.push(dbComment._id);
-  //       dbItem
-  //         .save()      
-  //         .then(updatedItem => res.json(updatedItem))
-  //     })
-  //     .catch((err) => res.json(err));
-  //   });
-  // })
 
-  router.get("comments/:commentsId", (req,res,next) => {
+
+  router.get("/comments/:itemId", (req,res,next) => {
     const { itemId } = req.params;
     const { commentsId } = req.params;
     if (!mongoose.Types.ObjectId.isValid(commentsId)) {

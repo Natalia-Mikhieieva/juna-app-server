@@ -7,10 +7,12 @@ const commentSchema = new Schema({
     }, 
     author:{
         type: String, 
-        // required: true
+        
     },
     owner: Boolean,
-    timestamp: Date
+    
+},{
+timestamps: true
 })
 
 const Comment = model("Comment", commentSchema);
