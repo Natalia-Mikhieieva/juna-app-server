@@ -49,9 +49,15 @@ router.post('/item/:itemId/comments', (req,res,next) => {
 
 
   
-  router.delete('/comments/:commentId/delete', (req,res) => {
-    const { commentId } = req.params;
-    Comment.findByIdAndDelete(commentId)
+  router.delete('/comments/:commentId/delete', (req,res, next) => {
+    const { commentId}  = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(commentId)) {
+      res.status(400).json({ message: 'Specified id is not valid' });
+      return;
+    }
+    
+    Comment.findByIdAndDelete(req.params.commentId)
       .then((response) => {res.json(response)})
       .catch((error) => console.log(`There is a delete error: ${error}`));
   })
